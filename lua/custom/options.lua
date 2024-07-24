@@ -1,29 +1,36 @@
--- Vim config file for gbp
+-- Neovim options file for gbp
 
 -- Reduce boilerplate with these: {{{
 local GBP_HOME = os.getenv 'GBP_HOME'
 local vo = vim.opt -- option objects
 local oo = vim.o -- global options
-local go = vim.g -- global options
-local wo = vim.wo -- window options
-local bo = vim.bo -- buffer options
+-- local go = vim.g -- global options
+-- local wo = vim.wo -- window options
+-- local bo = vim.bo -- buffer options
 -- }}}
 
--- Avoid modeline vulnerability: {{{
-oo.nomodeline = false
+-- Set Diagnostic icons
+local signs = { Error = '', Warn = '', Hint = '', Info = '' }
+for type, icon in pairs(signs) do
+  local hl = 'DiagnosticSign' .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
 
--- Set-up secure modeline as per: https://blog.firosolutions.com/exploits/vimsploit/
-oo.secure_modelines_verbose = 0
-oo.secure_modelines_modelines = 15
--- }}}
+-- -- Avoid modeline vulnerability: {{{
+-- oo.nomodeline = false
+--
+-- -- Set-up secure modeline as per: https://blog.firosolutions.com/exploits/vimsploit/
+-- oo.secure_modelines_verbose = 0
+-- oo.secure_modelines_modelines = 15
+-- -- }}}
 
 -- OPTIONS {{{
 
-oo.fileencoding = 'utf-8' -- the encoding written to a file
+oo.fileencoding = 'utf-8' -- the encodibg written to a file
 oo.title = true -- Show filename in titlebar of window
 -- oo.foldmethod = 'marker'   -- Enable marker folding for vimrc
 -- (secure modeline covers other cases)
-oo.nomore = true -- Don't page long listings
+-- oo.nomore = true -- Don't page long listings
 -- oo.cpoptions-=a         -- Don't set # after a :read
 oo.autowrite = true -- Save buffer automatically when changing files
 oo.swapfile = false
@@ -55,7 +62,7 @@ oo.secure = true -- Secure mode for reading vimrc, exrc files etc. in current di
 oo.exrc = true -- Allow the use of folder dependent settings
 oo.autoindent = true -- Autoindent
 oo.smartindent = true -- Note that this might mess with python comment indents.
-oo.vim_indent_cont = 0 -- No magic shifts on Vim line continuations
+-- oo.vim_indent_cont = 0 -- No magic shifts on Vim line continuations
 oo.wrap = true -- Wrap lines
 oo.linebreak = true -- Wrap at breaks
 oo.textwidth = 0
@@ -175,16 +182,16 @@ vo.diffopt:append 'vertical'
 -- oo.comments+=fb:-                  --Dash-space is a bullets
 
 --[[
-c       Auto-wrap comments using 'textwidth', inserting the current comment
-        leader automatically.
-                                                        fo-r
-r       Automatically insert the current comment leader after hitting
-        <Enter> in Insert mode.
-                                                        fo-o
-o       Automatically insert the current comment leader after hitting 'o' or
-        'O' in Normal mode.  In case comment is unwanted in a specific place
-        use CTRL-U to quickly delete it. i_CTRL-U
---]]
+  c       Auto-wrap comments using 'textwidth', inserting the current comment
+          leader automatically.
+                                                          fo-r
+  r       Automatically insert the current comment leader after hitting
+          <Enter> in Insert mode.
+                                                          fo-o
+  o       Automatically insert the current comment leader after hitting 'o' or
+          'O' in Normal mode.  In case comment is unwanted in a specific place
+          use CTRL-U to quickly delete it. i_CTRL-U
+  --]]
 vo.formatoptions:remove 'cro'
 vo.formatoptions:append 'j' -- Remove comment introducers when joining comment lines
 -- oo.cinoptions+=#1

@@ -26,7 +26,7 @@ return {
       },
     },
   },
-  config = function(opts)
+  config = function(_, opts)
     require('neogen').setup(opts)
   end,
 }

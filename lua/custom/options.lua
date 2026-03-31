@@ -2,6 +2,7 @@
 
 -- Reduce boilerplate with these: {{{
 local GBP_HOME = os.getenv 'GBP_HOME'
+local CACHE_HOME = GBP_HOME and (GBP_HOME .. '/.cache') or vim.fn.stdpath 'cache'
 local vo = vim.opt -- option objects
 local oo = vim.o -- global options
 -- local go = vim.g -- global options
@@ -49,17 +50,17 @@ oo.wildmode = 'list:longest,full' -- Show list of completions
 -- oo.wildmenu wildmode=longest:full,full
 
 oo.showmode = false -- Suppress mode change messages
-oo.updatetime = 2000 -- idleness is 2 sec
+oo.updatetime = 300 -- Faster diagnostics/refresh
 oo.scrolloff = 20 -- Scroll when X lines from top/bottom
 oo.visualbell = false -- Turn off visual beep
 oo.laststatus = 2 -- Always display a status line
-oo.cmdheight = 1 -- Command line height
+oo.cmdheight = 2 -- Better display for messages
 oo.hlsearch = true -- Highlight searches
 oo.hidden = true -- Don't unload a buffer when abandoning it
 oo.clipboard = 'unnamedplus' -- To work in tmux
 oo.spelllang = 'en_au' -- Australian spelling
 oo.secure = true -- Secure mode for reading vimrc, exrc files etc. in current dir
-oo.exrc = true -- Allow the use of folder dependent settings
+oo.exrc = vim.env.NVIM_ENABLE_EXRC == '1' -- Allow local vimrc only when explicitly enabled
 oo.autoindent = true -- Autoindent
 oo.smartindent = true -- Note that this might mess with python comment indents.
 -- oo.vim_indent_cont = 0 -- No magic shifts on Vim line continuations
@@ -85,8 +86,8 @@ oo.showmatch = true -- Show matching paren
 -- oo.infercase = true              -- Adjust completions to match case
 oo.gdefault = true -- g flag on sed subs automatically
 
-oo.directory = GBP_HOME .. '/.cache/vim/'
-oo.backupdir = GBP_HOME .. '/.cache/vim/bkp'
+oo.directory = CACHE_HOME .. '/vim/swap//'
+oo.backupdir = CACHE_HOME .. '/vim/bkp//'
 
 -- List mode stuff
 oo.list = true -- Start in list mode by default
@@ -106,7 +107,7 @@ oo.mouse = 'a' -- enable mouse for all modes settings.  Also avoids copying line
 -- Persistant undo
 oo.undofile = true -- Turn-on persistent undo
 oo.undolevels = 1000 -- Save a lot of back-history
-oo.undodir = GBP_HOME .. '/.cache/vim/undo/' -- Save all undo files in a single location
+oo.undodir = CACHE_HOME .. '/vim/undo//' -- Save all undo files in a single location
 --    (less messy, more risky)...
 
 -- Disabled options
@@ -127,12 +128,12 @@ oo.undodir = GBP_HOME .. '/.cache/vim/undo/' -- Save all undo files in a single 
 oo.pumblend = 20 -- opacity for popupmenu
 oo.inccommand = 'split' -- Live substitution
 
--- Better display for messages
-oo.cmdheight = 2
-
--- Long update times (default is 4000ms) leads to noticable delays and a bad
--- experience for diagnostic messages
-oo.updatetime = 300
+for _, dir in ipairs { oo.directory, oo.backupdir, oo.undodir } do
+  local expanded = vim.fn.expand(dir)
+  if vim.fn.isdirectory(expanded) == 0 then
+    vim.fn.mkdir(expanded, 'p')
+  end
+end
 
 -- don't give |ins-completion-menu| messages.
 -- oo.shortmess+=c

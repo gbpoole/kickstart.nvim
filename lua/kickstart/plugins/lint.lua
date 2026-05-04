@@ -47,6 +47,10 @@ return {
       vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
         group = lint_augroup,
         callback = function()
+          if not vim.bo.modifiable then
+            return
+          end
+
           local ft = vim.bo.filetype
           local configured = lint.linters_by_ft[ft]
           if not configured or #configured == 0 then

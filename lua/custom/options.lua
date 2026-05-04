@@ -50,6 +50,7 @@ oo.wildmode = 'list:longest,full' -- Show list of completions
 -- oo.wildmenu wildmode=longest:full,full
 
 oo.showmode = false -- Suppress mode change messages
+oo.termguicolors = true -- Enable true color in modern terminals/tmux
 oo.updatetime = 300 -- Faster diagnostics/refresh
 oo.scrolloff = 20 -- Scroll when X lines from top/bottom
 oo.visualbell = false -- Turn off visual beep
